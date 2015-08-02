@@ -2,33 +2,42 @@ mod alien;
 mod zomby;
 pub mod monster;
 
-pub struct Builder {
-	boost: u32
-}
-
 use self::alien::Alien;
 use self::zomby::Zomby;
+use count::Counting;
 
-impl Builder {
+pub struct Builder<'a, T: 'a> {
+	count: &'a mut T
+}
 
-	pub fn new(boost: u32) -> Builder {
+impl <'a, T: 'a> Builder<'a, T> where T: Counting {
+
+	pub fn new(count: &'a mut T) -> Builder<'a, T>  {
 		Builder{
-			boost: boost
+			count: count
 		}
 	}
 	
-	pub fn alien(&self, health: u32, damage: u32) -> Alien {
-		Alien::new(
-			health, 
-			&self.boost * damage
-		)
+	pub fn alien(&mut self, health: u32, damage: u32) -> Option<Alien> {
+
+		match self.count.next() {
+			None => None,
+			Some(_) => {
+				Some(Alien::new(health, damage))
+			}
+		}
+
 	}
 	
-	pub fn zomby(&self, health: u32, damage: u32) -> Zomby {
-		Zomby::new(
-			health, 
-			&self.boost * damage
-		)
+	pub fn zomby(&mut self, health: u32, damage: u32) -> Option<Zomby> {
+
+		match self.count.next() {
+			None => None,
+			Some(_) => {
+				Some(Zomby::new(health, damage))
+			}
+		}
+
 	}
 	
 }

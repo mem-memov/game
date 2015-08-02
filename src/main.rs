@@ -6,11 +6,13 @@ use game::monster::monster::Monster;
 
 fn main() {
 
-	let monster_builder = game::monster::Builder::new(5);
-	let mut monster = monster_builder.alien(100, 20);
-
 	let mut count = Count::new(2);
-	println!("count {:?}", count);
+
+	let mut monster_builder = game::monster::Builder::new(&mut count); // <-- Dependency Injection
+	let mut monster = match monster_builder.alien(50, 10) {
+		None => panic!("No monsters left"),
+		Some(monster) => monster
+	};
 	
 	let mut hero_builder = game::hero::Builder::new(&mut count); // <-- Dependency Injection
 	let mut hero1 = match hero_builder.superman(150, 20) {
@@ -22,7 +24,7 @@ fn main() {
 		None => panic!("No heros left"),
 		Some(hero) => hero
 	};
-  
+/*  
   //println!("This monster is an {:?}", monster);
   //println!("This hero is an {:?}", hero1);
 
@@ -30,6 +32,6 @@ fn main() {
 	monster.attack(&mut hero1);
 	
 	hero2.attack(&mut monster);
-	
+	*/
 	
 }
