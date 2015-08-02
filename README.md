@@ -1,3 +1,5 @@
+Not working at present because of an error caused by little experience with Rust.
+
 # game
 Demo project: DI and Factory pattern
 
