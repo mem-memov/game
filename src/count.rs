@@ -1,11 +1,12 @@
-#[derive(Debug)]
+use std::cell::Cell;
+
 pub struct Count {
 	limit: u32,
-	current: u32
+	current: Cell<u32>
 }
 
 pub trait Counting {
-	fn next(&mut self) -> Option<u32>;
+	fn next(&self) -> Option<u32>;
 }
 
 
@@ -13,25 +14,29 @@ impl Count {
 	pub fn new(limit: u32) -> Count {
 		Count{
 			limit: limit,
-			current: 0
+			current: Cell::new(0)
 		}
 	}
 }
 
 impl Counting for Count {
-	fn next(&mut self) -> Option<u32> {
-		if self.current == self.limit {
+
+	fn next(&self) -> Option<u32> {
+	
+		let mut current = self.current.get();
+	
+		if current == self.limit {
 			None
 		} else {
-			self.current = self.current + 1;
-			Some(self.current)
+			current = current + 1;
+			self.current.set(current);
+			Some(current)
 		}
+		
 	}
 }
 
-impl <'a> Counting for &'a mut Count {
-	fn next(&mut self) -> Option<u32> {
-		Count::next(*self)
-	}
-}
+
+
+
 

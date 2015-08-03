@@ -7,12 +7,12 @@ use self::zomby::Zomby;
 use count::Counting;
 
 pub struct Builder<'a, T: 'a> {
-	count: &'a mut T
+	count: &'a T
 }
 
 impl <'a, T: 'a> Builder<'a, T> where T: Counting {
 
-	pub fn new(count: &'a mut T) -> Builder<'a, T>  {
+	pub fn new(count: &'a T) -> Builder<'a, T>  {
 		Builder{
 			count: count
 		}
@@ -28,7 +28,7 @@ impl <'a, T: 'a> Builder<'a, T> where T: Counting {
 		}
 
 	}
-	
+
 	pub fn zomby(&mut self, health: u32, damage: u32) -> Option<Zomby> {
 
 		match self.count.next() {
@@ -39,6 +39,6 @@ impl <'a, T: 'a> Builder<'a, T> where T: Counting {
 		}
 
 	}
-	
+
 }
 
